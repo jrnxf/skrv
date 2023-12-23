@@ -60,7 +60,7 @@ export function App() {
         <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
         <Links />
       </head>
-      <body>
+      <body className="min-h-dvh bg-white text-black dark:bg-black dark:text-white">
         <Outlet />
         <ScrollRestoration />
         <Scripts />

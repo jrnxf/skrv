@@ -11,7 +11,7 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div className="dark:bg-black bg-white">
+    <div>
       <h1 className="text-3xl">skrv</h1>
       <Button>click me!</Button>
       <ModeToggle />
