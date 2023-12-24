@@ -71,7 +71,7 @@ const MainLayout = () => {
   return (
     <body className="min-h-dvh bg-white px-12 pb-12 text-black dark:bg-black dark:text-white">
       <Navbar />
-      <div className="pt-6">
+      <div className="w-80vw mx-auto max-w-3xl">
         <Outlet />
       </div>
       <ScrollRestoration />

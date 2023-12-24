@@ -7,21 +7,22 @@ import { cn } from "~/lib/utils";
 
 export function Navbar() {
   return (
-    <nav className="relative flex h-12 items-center justify-center gap-4">
+    <nav className="flex flex-col items-center justify-center gap-0">
       <Link
         to="/"
-        className="outline-ring absolute left-0 mb-4 mt-2 rounded-sm outline-offset-8 dark:outline-transparent"
+        className="outline-ring mt-2 rounded-sm outline-offset-8 dark:outline-transparent"
       >
-        <Logo className="ml-4 mt-2  w-[60px] max-w-[100px] sm:w-[80px]" />
+        <Logo className="w-[60px] max-w-[100px] sm:w-[80px]" />
       </Link>
-
-      <NavOption to="/users">Users</NavOption>
-      <NavOption to="/games">Games</NavOption>
-      <NavOption to="/posts">Posts</NavOption>
-      <NavOption to="/chat">Chat</NavOption>
-      <NavOption to="/login">Login</NavOption>
-
-      <ModeToggle />
+      <div className="relative flex h-12 items-center justify-center gap-4">
+        <NavOption to="/users">Users</NavOption>
+        <NavOption to="/games">Games</NavOption>
+        <NavOption to="/posts">Posts</NavOption>
+        <NavOption to="/chat">Chat</NavOption>
+        <NavOption to="/vault">Vault</NavOption>
+        <NavOption to="/login">Login</NavOption>
+        <ModeToggle />
+      </div>
     </nav>
   );
 }
@@ -36,7 +37,7 @@ const NavOption = ({
       cn(
         buttonVariants({
           variant: isActive ? "secondary" : "ghost",
-          size: "xs",
+          size: "sm",
           className: "justify-start",
         }),
       )

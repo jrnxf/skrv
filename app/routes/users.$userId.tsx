@@ -1,8 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { LoaderFunctionArgs, MetaFunction, json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { USERS } from "api/users";
+import React from "react";
 import ReactCountryFlag from "react-country-flag";
+import { Button } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
 
 export const meta: MetaFunction = () => {
   return [
@@ -27,12 +30,40 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return json({ user });
 }
 
+function Breadcrumbs({
+  links,
+  className,
+}: { links: [string, string][] } & React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={cn("flex items-center gap-2 self-start text-sm", className)}
+    >
+      {links.map(([link, text], idx) => (
+        <React.Fragment key={idx}>
+          <Button variant="ghost" asChild size="sm">
+            <Link to={link}>
+              <p>{text}</p>
+            </Link>
+          </Button>
+          {idx !== links.length - 1 && <p>/</p>}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
 export default function UserPage() {
   const { user } = useLoaderData<typeof loader>();
 
   return (
-    <div className="flex flex-col space-y-4">
-      <Avatar className="h-12 w-12 shrink-0">
+    <div className="flex flex-col items-center space-y-4">
+      <Breadcrumbs
+        links={[
+          ["/users", "Users"],
+          [`/users/${user.id}`, user.full_name],
+        ]}
+      />
+      <Avatar className="h-36 w-36 shrink-0">
         {user.avatar && (
           <AvatarImage
             className="h-full w-full rounded-full object-cover"
@@ -44,9 +75,15 @@ export default function UserPage() {
         </AvatarFallback>
       </Avatar>
       <div className="space-y-1">
-        <h1 className="text-xl font-bold">{user.full_name}</h1>
+        <h1 className="text-3xl font-bold">{user.full_name}</h1>
       </div>
       <p>{user.bio}</p>
+
+      <p>{user.social?.tiktok}</p>
+      <p>{user.social?.facebook}</p>
+      <p>{user.social?.instagram}</p>
+      <p>{user.social?.spotify}</p>
+      <p>{user.social?.twitter}</p>
 
       <p className="italic">{user.location?.country_long_name}</p>
       <p className="italic">{user.location?.country_short_name}</p>
