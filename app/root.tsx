@@ -18,6 +18,7 @@ import {
 
 import { themeSessionResolver } from "./sessions.server";
 
+import { Navbar } from "~/components/navbar";
 import stylesheet from "~/globals.css";
 
 export const links: LinksFunction = () => [
@@ -60,12 +61,19 @@ export function App() {
         <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
         <Links />
       </head>
-      <body className="min-h-dvh bg-white text-black dark:bg-black dark:text-white">
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-      </body>
+      <MainLayout />
     </html>
   );
 }
+
+const MainLayout = () => {
+  return (
+    <body className="min-h-dvh bg-white px-12 pb-12 text-black dark:bg-black dark:text-white">
+      <Navbar />
+      <Outlet />
+      <ScrollRestoration />
+      <Scripts />
+      <LiveReload />
+    </body>
+  );
+};
