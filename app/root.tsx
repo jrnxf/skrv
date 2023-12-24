@@ -62,6 +62,7 @@ export function App() {
         <Links />
       </head>
       <MainLayout />
+      <LiveReload />
     </html>
   );
 }
@@ -70,10 +71,11 @@ const MainLayout = () => {
   return (
     <body className="min-h-dvh bg-white px-12 pb-12 text-black dark:bg-black dark:text-white">
       <Navbar />
-      <Outlet />
+      <div className="pt-6">
+        <Outlet />
+      </div>
       <ScrollRestoration />
       <Scripts />
-      <LiveReload />
     </body>
   );
 };

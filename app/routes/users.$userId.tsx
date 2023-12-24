@@ -21,6 +21,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     throw new Error("User not found");
   }
 
+  console.log({
+    user,
+  });
   return json({ user });
 }
 
@@ -44,27 +47,13 @@ export default function UserPage() {
         <h1 className="text-xl font-bold">{user.full_name}</h1>
       </div>
       <p>{user.bio}</p>
-      {user.location?.country_short_name && (
-        <ReactCountryFlag countryCode={user.location.country_short_name} />
-      )}
 
       <p className="italic">{user.location?.country_long_name}</p>
-
-      {/* {user.avatar && (
-        <img src={user.avatarUrl} alt={user.name} className="w-64" />
-      )} */}
-      {/* <p>Member Since: {user.createdAt}</p> */}
-      {/* {user.posts.length > 0 && (
-        <>
-          <h1 className="text-xl font-bold">Posts</h1>
-          {user.posts.map((post) => (
-            <div key={post.id}>
-              <p className="font-bold text-lg">{post.title}</p>
-              <p className="text-secondary-foreground">{post.body}</p>
-            </div>
-          ))}
-        </>
-      )} */}
+      <p className="italic">{user.location?.country_short_name}</p>
     </div>
   );
 }
+
+const Flag = ({ countryCode }: { countryCode: string }) => {
+  return <ReactCountryFlag countryCode={countryCode} />;
+};
