@@ -7,7 +7,6 @@ import { Breadcrumbs } from "~/components/breadcrumbs";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
-import { Input } from "~/components/ui/input";
 
 export default function Posts() {
   const [posts, setPosts] = useState(POSTS);
@@ -20,23 +19,6 @@ export default function Posts() {
           <Link to="/posts/create">Create</Link>
         </Button>
       </div>
-
-      <Input
-        placeholder="Search posts..."
-        onChange={(e) => {
-          if (e.target.value === "") {
-            setPosts(POSTS);
-          } else {
-            setPosts((p) =>
-              p.filter((p) =>
-                p.posted_by.full_name
-                  .toLowerCase()
-                  .includes(e.target.value.toLowerCase()),
-              ),
-            );
-          }
-        }}
-      />
 
       {posts.map((post) => (
         <Link key={post.id} to={`/posts/${post.id}`}>

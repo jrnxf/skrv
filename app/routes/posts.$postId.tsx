@@ -3,6 +3,7 @@ import { LoaderFunctionArgs, MetaFunction, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { POSTS } from "api/posts";
 import getYouTubeID from "get-youtube-id";
+import { Breadcrumbs } from "~/components/breadcrumbs";
 
 export const meta: MetaFunction = () => {
   return [
@@ -32,6 +33,14 @@ export default function PostPage() {
 
   return (
     <div className="flex flex-col space-y-4">
+      <Breadcrumbs
+        links={[
+          ["/posts", "Posts"],
+
+          [`/users/${post.id}`, post.title],
+        ]}
+      />
+
       <Avatar className="h-12 w-12 shrink-0">
         {post.posted_by.avatar && (
           <AvatarImage

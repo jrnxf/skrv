@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Link } from "@remix-run/react";
 import { USERS } from "api/users";
 import { useState } from "react";
+import { Breadcrumbs } from "~/components/breadcrumbs";
 import { Badge } from "~/components/ui/badge";
 import {
   Card,
@@ -17,10 +18,7 @@ export default function Users() {
   const [users, setUsers] = useState(USERS);
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center gap-2 self-start text-sm">
-        <p className="px-2 py-1 font-medium">Users</p>
-      </div>
-
+      <Breadcrumbs links={[["/users", "Users"]]} />
       <Input
         placeholder="Search users..."
         onChange={(e) => {

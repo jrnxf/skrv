@@ -1,7 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, Link } from "@remix-run/react";
+import { ActionFunctionArgs, json } from "@remix-run/node";
+import { Form, Link, useSubmit } from "@remix-run/react";
 import { FormProvider, useForm } from "react-hook-form";
 import * as z from "zod";
+import { register } from "~/auth.server";
 import { Button } from "~/components/ui/button";
 import {
   FormControl,
@@ -12,8 +14,9 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
+import { validateActionFormData } from "~/lib/utils";
 
-const formSchema = z.object({
+const registerFormSchema = z.object({
   name: z.string().min(1, {
     message: "Name is required",
   }),
@@ -24,12 +27,30 @@ const formSchema = z.object({
   bio: z.string().optional(),
 });
 
-type FormData = z.infer<typeof formSchema>;
+export type RegisterFormData = z.infer<typeof registerFormSchema>;
 
-const resolver = zodResolver(formSchema);
+const resolver = zodResolver(registerFormSchema);
+
+export async function action({ request }: ActionFunctionArgs) {
+  try {
+    await validateActionFormData<RegisterFormData>(request, registerFormSchema);
+  } catch (error) {
+    return json({ error }, { status: 400 });
+  }
+
+  const data = Object.fromEntries(await request.formData()) as RegisterFormData;
+
+  const user = await register(data);
+
+  console.log({
+    user,
+  });
+
+  return json({ user });
+}
 
 export default function Join() {
-  const form = useForm<FormData>({
+  const form = useForm<RegisterFormData>({
     resolver,
     defaultValues: {
       name: "",
@@ -41,12 +62,21 @@ export default function Join() {
 
   const { handleSubmit } = form;
 
+  const submit = useSubmit();
+
   return (
     <div className="mx-auto max-w-sm">
       <FormProvider {...form}>
         <Form
           onSubmit={(event) => {
-            handleSubmit((data, event) => {})(event);
+            handleSubmit((data, event) => {
+              const formData = new FormData();
+              Object.entries(data).forEach(([k, v]) => formData.append(k, v));
+
+              if (event) {
+                submit(formData, { method: "POST" });
+              }
+            })(event);
           }}
           className="space-y-4"
         >

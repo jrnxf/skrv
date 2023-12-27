@@ -1,11 +1,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { LoaderFunctionArgs, MetaFunction, json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { USERS } from "api/users";
-import React from "react";
 import ReactCountryFlag from "react-country-flag";
-import { Button } from "~/components/ui/button";
-import { cn } from "~/lib/utils";
+import { Breadcrumbs } from "~/components/breadcrumbs";
 
 export const meta: MetaFunction = () => {
   return [
@@ -28,28 +26,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     user,
   });
   return json({ user });
-}
-
-function Breadcrumbs({
-  links,
-  className,
-}: { links: [string, string][] } & React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      className={cn("flex items-center gap-2 self-start text-sm", className)}
-    >
-      {links.map(([link, text], idx) => (
-        <React.Fragment key={idx}>
-          <Button variant="ghost" asChild size="sm">
-            <Link to={link}>
-              <p>{text}</p>
-            </Link>
-          </Button>
-          {idx !== links.length - 1 && <p>/</p>}
-        </React.Fragment>
-      ))}
-    </div>
-  );
 }
 
 export default function UserPage() {

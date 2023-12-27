@@ -1,3 +1,5 @@
+import { Breadcrumbs } from "~/components/breadcrumbs";
+
 export default function Games() {
-  return <h1 className="text-2xl">Games</h1>;
+  return <Breadcrumbs links={[["/games", "Games"]]} />;
 }

@@ -8,6 +8,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useMatches,
 } from "@remix-run/react";
 import clsx from "clsx";
 import {
@@ -18,8 +19,10 @@ import {
 
 import { themeSessionResolver } from "./sessions.server";
 
+import { useMemo } from "react";
 import { Navbar } from "~/components/navbar";
 import stylesheet from "~/globals.css";
+import { supabase } from "~/lib/supabase";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref
@@ -32,9 +35,14 @@ export const links: LinksFunction = () => [
 
 // Return the theme from the session storage using the loader
 export async function loader({ request }: LoaderFunctionArgs) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const { getTheme } = await themeSessionResolver(request);
   return {
     theme: getTheme(),
+    user,
   };
 }
 // Wrap your app with ThemeProvider.
@@ -67,10 +75,37 @@ export function App() {
   );
 }
 
+export const useMatchesData = ({
+  id,
+}: {
+  id: string;
+}): Record<string, unknown> | undefined => {
+  const matches = useMatches();
+
+  const match = useMemo(
+    () => matches.find((route) => route.id === id),
+    [matches, id],
+  );
+
+  return match?.data as Record<string, unknown>;
+};
+
+export const useOptionalUser = (): any | undefined => {
+  const rootData = useMatchesData({ id: "root" });
+
+  if (!rootData || !rootData.user) {
+    return undefined;
+  }
+
+  return rootData.user;
+};
+
 const MainLayout = () => {
+  const user = useOptionalUser();
   return (
     <body className="min-h-dvh bg-white px-12 pb-12 text-black dark:bg-black dark:text-white">
       <Navbar />
+      <pre>{JSON.stringify({ user }, null, 2)}</pre>
       <div className="w-80vw mx-auto max-w-3xl">
         <Outlet />
       </div>
